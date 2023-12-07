@@ -55,24 +55,39 @@ def find_match(inputs, a2b_map):
         for row in a2b_map:
             if input >= row[1] and input < row[1] + row[2]:
                 output = row[0] + input - row[1]
-                # print(f"Found matches for input {input}:{output}")
-                # print(f"map row: {row}")
                 found = 1
                 break
         if found == 0:
-            # print(f"No match for input: {input}")
             output = input
-            # print(f"Decided match for input {input}:{output}")
         outputs.append(output)
     return outputs
 
 
-soils = find_match(seeds, seed_to_soil_map)
-fertilizers = find_match(soils, soil_to_fertilizer_map)
-waters = find_match(fertilizers, fertilizer_to_water_map)
-lights = find_match(waters, water_to_light_map)
-temperatures = find_match(lights, light_to_temperature_map)
-humidities = find_match(temperatures, temperature_to_humidity_map)
-locations = find_match(humidities, humidity_to_location_map)
-print(locations)
-print(min(locations))
+def find_match2(intervals, a2b_map):
+    outputs = []
+    for interval in intervals:
+        found = 0
+        output = -1
+        for row in a2b_map:
+            
+        outputs.append(output)
+    return outputs
+
+
+# seeds recalculated
+seeds2 = []
+for i in range(0, len(seeds), 2):
+    seeds2.append([seeds[i], seeds[i] + seeds[i + 1] - 1])
+print(f"initial seeds: {seeds}")
+print(f"final seeds: {seeds2}")
+print(len(seeds2))
+
+# soils = find_match(seeds2, seed_to_soil_map)
+# fertilizers = find_match(soils, soil_to_fertilizer_map)
+# waters = find_match(fertilizers, fertilizer_to_water_map)
+# lights = find_match(waters, water_to_light_map)
+# temperatures = find_match(lights, light_to_temperature_map)
+# humidities = find_match(temperatures, temperature_to_humidity_map)
+# locations = find_match(humidities, humidity_to_location_map)
+# print(locations)
+# print(min(locations))
