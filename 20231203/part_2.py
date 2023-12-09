@@ -3,53 +3,41 @@ import re
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-numbers_found = []
+numbers_found = {}
 stars_found = []    
-# with open("20231203_input_example.txt", "r") as f:
-with open("20231203_input.txt", "r") as f:
+with open("20231203_input_example.txt", "r") as f:
+# with open("20231203_input.txt", "r") as f:
     lines = [line.strip() for line in f.readlines()]
     for idx, line in enumerate(lines):
-        numbers = []
+        # find the numbers
         matches = re.finditer(r"(\d+)", line)
         for match in matches:
-            numbers.append([
+            if idx not in numbers_found:
+                numbers_found[idx] = []
+            numbers_found[idx].append([
                 match.group(),
-                idx,
                 match.start(),
                 match.end()
             ])
-        numbers_found.extend(numbers)
-        # print(line)
+        # find the stars
+        starts = re.finditer(r"\*", line)
+        for star in starts:
+            stars_found.append([
+                idx,
+                star.start()
+            ])
 
-# print(numbers_found)
+print(numbers_found)
+print(stars_found)
 
-# filter qualified numbers
 n_cols = len(lines[0])
-n_rows = len(lines)
-print(f"n_cols: {n_cols}, n_rows: {n_rows}")
-qualified_numbers = []
-disqualified_numbers_by_row = {i:[] for i in range(n_rows)}
 
-for number, row, start, end in numbers_found:
-    above = lines[row - 1][max(0, start-1):min(n_cols, end+1)] if row > 0 else "."
-    below = lines[row + 1][max(0, start-1):min(n_cols, end+1)] if row < n_rows - 1 else "."
-    left = lines[row][start-1] if start > 0 else "."
-    right = lines[row][end] if end < n_cols else "."
-
-    if (
-        above == "." * len(above) and
-        below == "." * len(below) and
-        left == "." and
-        right == "."
-    ):
-        disqualified_numbers_by_row[row].append(number)
-        print(f"{above}\n{left}{number}{right}\n{below}")
-        continue
-    else:
-        qualified_numbers.append(number)
-
-# print(qualified_numbers)
-print(f"Answer: {sum([int(n) for n in qualified_numbers])}")
-print(f"Disqualified numbers by row: {disqualified_numbers_by_row}")
+# find the gears
+for star_row, star_col in stars_found:
+    numbers_adjacent = []
+    if star_row > 0:
+        for number, number_start, number_end in numbers_found[star_row - 1]:
+            if number_end > max(0, star_col-1) and number_start <= min(n_cols, star_col+1):
+                numbers_adjacent.append(number)
 
 
