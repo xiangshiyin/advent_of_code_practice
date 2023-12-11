@@ -4,8 +4,8 @@ from collections import deque
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 # with open("20231210_input_example_2.txt", "r") as f:
-# with open("20231210_input_example_1.txt", "r") as f:
-with open("20231210_input.txt", "r") as f:
+with open("20231210_input_example_1.txt", "r") as f:
+# with open("20231210_input.txt", "r") as f:
     lines = [line.strip() for line in f.readlines()]
 
 print(f"Number of lines: {len(lines)}")
@@ -62,4 +62,9 @@ while queue:
                     farthest = grids[r_next][c_next]
                 queue.append([r_next, c_next])
 
+# for line in visited:
+for line in grids:
+    print('|'.join(
+        [str(x).ljust(2,' ') for x in line]
+    ))
 print(f"Farthest: {farthest}")
