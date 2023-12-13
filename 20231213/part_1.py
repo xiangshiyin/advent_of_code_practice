@@ -5,6 +5,8 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 # step 1: parse the data
 blocks = []
+
+# with open("20231213_input_example2.txt", "r") as f:
 # with open("20231213_input_example.txt", "r") as f:
 with open("20231213_input.txt", "r") as f:
     raw = f.read().split("\n\n")
@@ -12,62 +14,51 @@ with open("20231213_input.txt", "r") as f:
 for block in raw:
     blocks.append([line.strip() for line in block.split()])
 
-# print(blocks)
-
-# block_cols = []
-# for block in block_rows:
-#     cols = []
-#     for j in range(len(block[0])):
-#         col = ""
-#         for i in range(len(block)):
-#             col += block[i][j]
-#         cols.append(col)
-#         # print(cols)
-#     block_cols.append(cols)
-
-# # print(block_cols)
-
-
-# step 2: find the reflection axis, both the horizontal and vertical axis
-cols_to_the_left = 0
-## vertical line
-for block in blocks:
-    v_axis = defaultdict(int)
-    n_rows = len(block)
-    n_cols = len(block[0])
-    for row in block:
-        # print(row)
+# step 2: find the vertical lines
+vlines = []
+for k, block in enumerate(blocks):
+    b_vlines = set()
+    for i, line in enumerate(block):
+        n_cols = len(line)
         for j in range(1, n_cols):
-            if (j <= n_cols // 2 and row[0:j] == row[j : j + j][::-1]) or (
-                j > n_cols // 2 and row[j - (n_cols - j) : j] == row[j:n_cols][::-1]
-            ):
-                v_axis[j] += 1
+            # print(f"block: {k}, line: {line}, b_vlines: {b_vlines}, i: {i}, j: {j}")
+            if (i == 0) and ((j <= n_cols // 2 and line[:j] == line[j:j*2][::-1]) or (j > n_cols // 2 and line[j - (n_cols - j):j] == line[j:][::-1])):
+                b_vlines.add(j)
+            elif (i > 0) and (j in b_vlines) and not ((j <= n_cols // 2 and line[:j] == line[j:j*2][::-1]) or (j > n_cols // 2 and line[j - (n_cols - j):j] == line[j:][::-1])):
+                b_vlines.remove(j)
+        if len(b_vlines) == 0:
+            no_lines = 1
+            break
+    vlines.append(b_vlines)
+# print(f"vlines: {vlines}")
 
-    for col, freq in v_axis.items():
-        if freq == n_rows:
-            cols_to_the_left += col
-
+## calculate the number of cols to the left
+cols_to_the_left = 0
+for block in vlines:
+    for cols in block:
+        cols_to_the_left += cols
 print(f"cols_to_the_left: {cols_to_the_left}")
 
-rows_above = 0
-# horizontal line
+# step 3: find the horizontal lines
+hlines = []
+
 for block in blocks:
-    h_axis = defaultdict(int)
-    for i in range(1, n_rows):
-        if (
-            i <= n_rows // 2
-            and "\n".join(block[0:i][::-1]) == "\n".join(block[i : i + i])
-        ) or (
-            i > n_rows // 2
-            and "\n".join(block[i - (n_rows - i) : i][::-1])
-            == "\n".join(block[i:n_rows])
-        ):
-            h_axis[i] += 1
-            # print(i, i <= n_rows // 2, i > n_rows // 2)
-        # print(i, "\n".join(block[0:i][::-1]), "\n".join(block[i : i + i]))
-# print(h_axis)
+    b_hlines = set()
+    for i in range(1, len(block)):
+        if (i <= len(block) // 2 and ','.join(block[:i][::-1]) == ','.join(block[i:i*2])) or (i > len(block) // 2 and ','.join(block[i - (len(block) - i):i][::-1]) == ','.join(block[i:])):
+            b_hlines.add(i)
+    hlines.append(b_hlines)
+# print(f"hlines: {hlines}")
 
-for row in h_axis:
-    rows_above += row
+## calculate the number of rows above
+rows_above = 0
+for block in hlines:
+    for rows in block:
+        rows_above += rows
+print(f"rows_above: {rows_above}")
 
-print(f"Answer: {rows_above * 100 + cols_to_the_left}")
+# ste 5: find the total
+total = rows_above * 100 + cols_to_the_left
+print(f"total: {total}")             
+print(f"Number of blocks: {len(blocks)}")
+
