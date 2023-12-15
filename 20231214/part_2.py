@@ -1,3 +1,6 @@
+""" 
+This takes forever to fnish. I think I need to find a way to optimize the tilt function.
+"""
 import os
 from tqdm import tqdm
 from collections import deque
@@ -87,8 +90,8 @@ for line in matrix:
 # cycles = 10000000
 cycles = 1
 for i in tqdm(range(cycles), ncols=70):
-    # operation_idx = cycles % 4
-    operation_idx = 1
+    operation_idx = (cycles - 1) % 4
+    print(f"operation: {operations[operation_idx]}")
     tilt(matrix, operations[operation_idx])
 
 # total_weight = calculate_weight(input)
