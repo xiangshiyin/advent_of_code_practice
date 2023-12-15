@@ -3,13 +3,13 @@ This takes forever to fnish. I think I need to find a way to optimize the tilt f
 """
 import os
 from tqdm import tqdm
-from collections import deque
+from collections import defaultdict
 
 os.chdir(os.path.dirname(__file__))
 
 input = []
-with open("20231214_input_example.txt", "r") as f:
-# with open("20231214_input.txt", "r") as f:
+# with open("20231214_input_example.txt", "r") as f:
+with open("20231214_input.txt", "r") as f:
     for line in f:
         input.append([col for col in line.strip()])
 
@@ -23,13 +23,8 @@ operations = [
     (0, 1), # east
 ]
 
-def turn_clockwise(matrix):
-    return [list(reversed(i)) for i in zip(*matrix)]
-
 def tilt(matrix, operation):
     dr, dc = operation
-    # for i in range(operation_idx):
-    #     matrix = turn_clockwise(matrix)
     n_rows = len(matrix)
     n_cols = len(matrix[0])
 
@@ -75,28 +70,43 @@ def calculate_weight(matrix):
 
     return total_weight                    
 
-# # validate the function with part 1 examples
-# tilt(input, operations[0])
-# print(f"Total load on the north support beam: {calculate_weight(input)}")
-
+def to_string(matrix):
+    return '\n'.join([''.join(line) for line in matrix])
 
 matrix = input.copy()
-print(f"Before the tilt:")
-for line in matrix:
-    print(' '.join(line))
 
 
-# cycles = 1000000000
+cycles = 1000000000
 # cycles = 10000000
-cycles = 1
-for i in tqdm(range(cycles), ncols=70):
-    operation_idx = (cycles - 1) % 4
-    print(f"operation: {operations[operation_idx]}")
-    tilt(matrix, operations[operation_idx])
+# cycles = 3
 
-# total_weight = calculate_weight(input)
-# print(f"Total load on the north support beam: {total_weight}")
+def rotate(matrix, cycles):
+    seen = defaultdict(list)
+    pattern_repeated = ''
+    for i in tqdm(range(cycles), ncols=70):
+        for j in range(4):
+            tilt(matrix, operations[j])
+        hash = to_string(matrix)
+        seen[hash].append(i + 1)
+        if len(seen[hash]) == 3:
+            # print(f"Cycle detected when hash = {hash}\nCorresponding cycles: {seen[hash]}, cycle period: {seen[hash][-1] - seen[hash][-2]}")
+            pattern_repeated = hash
+            print(f"Stopped at cycle {i + 1}")
+            break
 
-print(f"After the tilt:")
-for line in matrix:
-    print(' '.join(line))
+    cycle_period = seen[pattern_repeated][-1] - seen[pattern_repeated][-2]
+    cycles_residual = (cycles - seen[pattern_repeated][-1]) % cycle_period
+    print(f"cycles_residual: {cycles_residual}")
+
+    for i in tqdm(range(cycles_residual), ncols=70):
+        for j in range(4):
+            tilt(matrix, operations[j])
+
+rotate(matrix, cycles)
+
+total_weight = calculate_weight(matrix)
+print(f"Total load on the north support beam: {total_weight}")
+
+# print(f"After the tilt:")
+# for line in matrix:
+#     print(' '.join(line))
