@@ -24,5 +24,5 @@ with open(f"part_2.py", "w") as f:
     pass
 
 with open(f"README.md", "w") as f:
-    f.write(f"Source: https://adventofcode.com/2023/day/{int(args.date[-2:])}")
+    f.write(f"Source: https://adventofcode.com/2024/day/{int(args.date[-2:])}")
 
