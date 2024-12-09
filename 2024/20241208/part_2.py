@@ -3,6 +3,9 @@ import sys
 from collections import defaultdict
 import itertools
 import math
+import time
+
+start_time = time.time()
 
 # cd into the current directory
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -68,6 +71,8 @@ for antenna_type in antennas:
         target_positions.update(find_all_target_positions(pair[0], distance_vector_unit))
         target_positions.update(find_all_target_positions(pair[0], distance_vector_unit_opposite))
 
-print(target_positions)
+# print(target_positions)
 print(len(target_positions))
 
+end_time = time.time()
+print(f"Time taken: {end_time - start_time} seconds")
