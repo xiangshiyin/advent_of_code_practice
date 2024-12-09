@@ -17,19 +17,15 @@ with open(path, "r") as file:
 
 # 2. translate the diskmap into a string of file ids and spaces
 n = len(diskmap)
-file_id_current = 0
 file_id_map = {}
-idx = 0
 translated_diskmap = ''
 for i in range(n):
-    if idx % 2 == 0: # files
-        mapped_char = chr(48 + file_id_current)
-        translated_diskmap += mapped_char * int(diskmap[idx])
-        file_id_map[mapped_char] = file_id_current
-        file_id_current += 1
+    if i % 2 == 0: # files
+        mapped_char = chr(48 + i // 2)
+        translated_diskmap += mapped_char * int(diskmap[i])
+        file_id_map[mapped_char] = i // 2
     else: # spaces
-        translated_diskmap += '.' * int(diskmap[idx])
-    idx += 1
+        translated_diskmap += '.' * int(diskmap[i])
 
 # print(file_id_map)
 
