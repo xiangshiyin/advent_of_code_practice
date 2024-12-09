@@ -9,6 +9,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 # 1. Read the input file
 use_example = '--example' in sys.argv
+enable_debug = '--debug' in sys.argv
 path = "20241209_input_example.txt" if use_example else "20241209_input.txt"
 diskmap = ''
 with open(path, "r") as file:
@@ -16,86 +17,81 @@ with open(path, "r") as file:
         diskmap += line.strip()
 
 n = len(diskmap)
-# print(diskmap)
+if enable_debug:
+    print(diskmap)
 
 # 2. utility functions
-def get_file_id_rep(i):
-    return chr(48 + int(diskmap[i]))
-
-def print_translated_diskmap(diskmap):
-    n = len(diskmap)
-    file_id_map = {}
-    translated_diskmap = ''
+def translate_diskmap(diskmap):
+    diskmap_translated = []
     for i in range(n):
-        if i % 2 == 0: # files
-            mapped_char = chr(48 + i // 2)
-            translated_diskmap += mapped_char * int(diskmap[i])
-            file_id_map[mapped_char] = i // 2
-        else: # spaces
-            translated_diskmap += '.' * int(diskmap[i])
+      if i % 2 == 0: # files
+          diskmap_translated.extend(
+              [str(i // 2)] * int(diskmap[i])
+          )
+      else: # spaces
+          diskmap_translated.extend(
+              ['.'] * int(diskmap[i])
+          )
+    return diskmap_translated
 
-    return translated_diskmap, file_id_map
+diskmap_translated = translate_diskmap(diskmap)
+print(f"Before traversal: {'|'.join(diskmap_translated[:300])}")
 
-translated_diskmap, file_id_map = print_translated_diskmap(diskmap)
-m = len(translated_diskmap)
-print(f"Length of translated diskmap: {m}")
+# 3. Traverse the translated diskmap
+m = len(diskmap_translated)
+r = m - 1
 
-# 3. Use 4 pointers to locate the leftmost free space block and the rightmost file block
-rl, rr = m - 1, m - 1
-round = 0
-while rl > int(diskmap[0]):
-    print(f"Round {round}")
-    # print(f"Round {round}, diskmap: {translated_diskmap}, rl: {rl}, rr: {rr}")
-    ## First, find the rightmost file block
-    while rl > 0 and translated_diskmap[rl] == '.':
-        rl -= 1
-        rr -= 1
-    while rl > 0 and translated_diskmap[rl] != '.' and translated_diskmap[rl] == translated_diskmap[rr]:
-        rl -= 1
-    if rl == int(diskmap[0]):
-        break
-
-    ll, lr = 0, 0
-    subround = 0
-
-    while True:
-        translated_diskmap_before = translated_diskmap
-        # print(f"Subround {subround}: {(ll, lr), (rl, rr)}")
-        if lr >= rl:
+while r > int(diskmap[0]):
+    l = 0
+    while l < r:
+    # while r > 0:
+        if diskmap_translated[l] != '.':
+            l += 1
+        elif diskmap_translated[r] == '.':
+            r -= 1
+        elif l == r or l == m - int(diskmap[-1]):
             break
-        while lr < m and translated_diskmap[lr] != '.':
-            ll += 1
-            lr += 1
-        while lr < m and translated_diskmap[lr] == '.':
-            lr += 1
+        else:
+            len_current_file_block = int(
+                diskmap[
+                    int(diskmap_translated[r]) * 2
+                ]
+            )
+            if enable_debug:
+                print(f"Current file block length: {len_current_file_block}, file ID: {diskmap_translated[r]}")
+            if ''.join(diskmap_translated[l:l + len_current_file_block]) == '.' * len_current_file_block:
+                # swap the free space block and the current file block
+                if enable_debug:
+                    print(f"Before swap: {diskmap_translated}")
+                diskmap_translated[l:l+len_current_file_block] = diskmap_translated[r+1-len_current_file_block:r+1]
+                diskmap_translated[r+1-len_current_file_block:r+1] = '.' * len_current_file_block
+                if enable_debug:
+                    print(f"After swap: {diskmap_translated}")
+                break
+            else: # not enough space to swap
+                while l < r and diskmap_translated[l] == '.':
+                    l += 1
+    r -= len_current_file_block
+    
 
 
-        # print(f"Free space block: {(ll, lr)}, File block: {(rl, rr)}")
-        if rr - rl <= lr - ll and lr < rl:
-            translated_diskmap = translated_diskmap[:ll] + translated_diskmap[rl+1: rr+1] + translated_diskmap[ll + (rr - rl):(rl+1)] + '.' * (rr - rl) + translated_diskmap[rr+1:]
-            # print("Before:",translated_diskmap_before)
-            # print("After:",translated_diskmap)        
-            # print(translated_diskmap_before == translated_diskmap, len(translated_diskmap_before) == len(translated_diskmap))
-            break
+print(f"After traversal: {'|'.join(diskmap_translated[:300])}")
 
-        ll = lr
-        subround += 1
-    rr = rl
-    round += 1
-
-# 3. calculate the checksum of file ids
+# 4. Calculate the checksum
 checksum = 0
 for i in range(m):
-    if translated_diskmap[i] != '.':
-        checksum += i * file_id_map[translated_diskmap[i]]
-
-print(translated_diskmap[:300])
-print(checksum)
-print(translated_diskmap[-300:])
-print(f"Length of translated diskmap: {m}")
+    if diskmap_translated[i] != '.':
+        checksum += i * int(diskmap_translated[i])
+print(f"Checksum: {checksum}")
 
 end_time = time.time()
 print(f"Time taken: {end_time - start_time} seconds")
 
-# part 1: 6378826667552
-# part 2: 6413328589346
+# import random
+
+# random_string = ''.join(random.choices('0123456789', k=100))
+# print(f"Generated random string: {random_string}")
+
+# part 2: 
+# Checksum: 6413328569890
+# Time taken: 27.19003701210022 seconds
