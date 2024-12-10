@@ -1,6 +1,11 @@
 # advent_of_code_practice
 Link https://adventofcode.com/
 
+## Install the environment
+```
+poetry install
+```
+
 ## How-to with the `utils` CLI
 Run the following command to generate the date folder and template files
 ```
