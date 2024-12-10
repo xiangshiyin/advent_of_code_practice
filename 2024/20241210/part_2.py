@@ -1,10 +1,11 @@
-
+import time
 import os
 import sys
 
 # cd into the current directory
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
+start_time = time.time()
 # 1. Read the input file
 use_example = '--example' in sys.argv
 path = "20241210_input_example.txt" if use_example else "20241210_input.txt"
@@ -42,3 +43,6 @@ total_scores = 0
 for candidate in candidates:
     total_scores += find_all_paths(grid, candidate, [candidate])
 print(total_scores)
+
+end_time = time.time()
+print(f"Time taken: {end_time - start_time} seconds")
