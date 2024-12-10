@@ -46,11 +46,8 @@ def create_file_if_not_exists(file_path, content):
 ######## CLI #########
 app = typer.Typer()
 
-@app.command()
-def create_day(date: Annotated[str, typer.Argument(help="The date to create the files for in the format YYYYMMDD")]):
-    """
-    Generate the data folders and code files for the given date.
-    """
+@app.command(help="Generate the data folders and code files for the given date.")
+def create_day(date: Annotated[str, "The date to create the files for in the format YYYYMMDD"]):
     year = date[:4]
     date_id = int(date[-2:])
     date_dir_path = f"./{year}/{date}"
@@ -62,7 +59,7 @@ def create_day(date: Annotated[str, typer.Argument(help="The date to create the 
 
     logger.info(f"Creating files for {date}...")
     template_path = os.path.join(os.getcwd(), "utils")
-    readme_content, code_content = render_template(template_path, {"year": year, "date_id": date_id, "date": date})
+    code_content, readme_content = render_template(template_path, {"year": year, "date_id": date_id, "date": date})
 
     create_file_if_not_exists(readme_path, readme_content)
     create_file_if_not_exists(part_1_path, code_content)
