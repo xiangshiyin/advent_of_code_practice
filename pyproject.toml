@@ -1,15 +1,20 @@
 [tool.poetry]
-name = "advent-of-code-practice"
+name = "utils"
 version = "0.1.0"
-description = ""
-authors = ["Xiangshi Yin <xiangshi.yin@shopify.com>"]
+description = "CLI tool to quickly generate boilerplate scripts"
+authors = ["Xiangshi Yin <piupiuyin@gmail.com>"]
+license = "Apache"
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
 jinja2 = "^3.1.4"
 typer = {extras = ["all"], version = "^0.12.5"}
+tqdm = "^4.67.1"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+utils = "utils.main:app"
