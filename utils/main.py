@@ -53,6 +53,8 @@ def create_day(date: Annotated[str, "The date to create the files for in the for
     date_dir_path = f"./{year}/{date}"
     part_1_path = f"{date_dir_path}/part_1.py"
     part_2_path = f"{date_dir_path}/part_2.py"
+    input_path = f"{date_dir_path}/{date}_input.txt"
+    input_example_path = f"{date_dir_path}/{date}_input_example.txt"
     readme_path = f"{date_dir_path}/README.md"
 
     create_folder_if_not_exists(date_dir_path)
@@ -64,7 +66,8 @@ def create_day(date: Annotated[str, "The date to create the files for in the for
     create_file_if_not_exists(readme_path, readme_content)
     create_file_if_not_exists(part_1_path, code_content)
     create_file_if_not_exists(part_2_path, code_content)
-
+    create_file_if_not_exists(input_path, "")
+    create_file_if_not_exists(input_example_path, "")
     logger.info(f"Files created for {date}.")
 
 if __name__ == "__main__":
