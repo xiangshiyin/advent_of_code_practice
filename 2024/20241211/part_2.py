@@ -1,7 +1,6 @@
 import os
 import sys
 import time
-from tqdm import tqdm
 from functools import lru_cache
 
 # cd into the current directory
@@ -22,7 +21,6 @@ with open(path, "r") as file:
 @lru_cache(maxsize=None)
 def output_length(number, rounds_to_go):
     if rounds_to_go == 0:
-        # print(number)
         return 1
     else:
         if number == '0':
