@@ -6,6 +6,7 @@ import time
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 start_time = time.time()
+#####################################################
 # 1. Read the input file
 use_example = '--example' in sys.argv
 path = "{{date}}_input_example.txt" if use_example else "{{date}}_input.txt"
@@ -14,5 +15,6 @@ with open(path, "r") as file:
     for line in file:
         grid.append(list(line.strip()))
 
+#####################################################
 end_time = time.time()
 print(f"Time taken: {end_time - start_time} seconds")
