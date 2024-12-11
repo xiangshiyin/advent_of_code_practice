@@ -1,6 +1,3 @@
-"""
-Dramatically slow down after 41 rounds
-"""
 import os
 import sys
 import time
@@ -21,31 +18,32 @@ with open(path, "r") as file:
     for line in file:
         grid.extend(line.split())
 
-# 2. Define the blink function with caching
+# 2. Define the blink function using dynamic programming
 @lru_cache(maxsize=None)
-def blink(number):
-    if int(number) == 0:
-        return ['1']
-    elif len(number) % 2 == 0:
-        return [number[:len(number)//2], str(int(number[len(number)//2:]))]
+def output_length(number, rounds_to_go):
+    if rounds_to_go == 0:
+        # print(number)
+        return 1
     else:
-        return [str(int(number) * 2024)]
-    
-# 3. Apply the blink function to the grid
-round = 0
+        if number == '0':
+            return output_length('1', rounds_to_go - 1)
+        elif len(number) % 2 == 0:
+            return output_length(number[:len(number)//2], rounds_to_go - 1) + output_length(str(int(number[len(number)//2:])), rounds_to_go - 1)
+        else:
+            return output_length(str(int(number) * 2024), rounds_to_go - 1)
 
-if debug:
-    print(f"Initial grid: {grid}")
 
-for round in tqdm(range(75), desc="Processing rounds"):
-    tmp = []
-    for number in grid:
-        tmp.extend(blink(number))
-    grid = tmp
-    if debug:
-        print(f"After round {round}: {grid}")
+# 3. Test the function
+# print(grid)
+# print(output_length('125', 6))
+# print(output_length('17', 6))
 
-print(len(grid))
+# 4. Run the full list of numbers
+counter = 0
+for number in grid:
+    counter += output_length(number, 75)
+print(counter)
+
 #####################################################
 end_time = time.time()
 print(f"Time taken: {end_time - start_time} seconds")
