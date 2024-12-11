@@ -1,6 +1,11 @@
 # advent_of_code_practice
 Link https://adventofcode.com/
 
+## Configure poetry to use in-project virtual environment
+```
+poetry config virtualenvs.in-project true
+```
+
 ## Install the environment
 ```
 poetry install
