@@ -30,28 +30,17 @@ def get_num_edges(positions, direction):
     - If the direction is horizontal, find the number of segments in the horizontal direction
     - If the direction is vertical, find the number of segments in the vertical direction
     """
-    if direction == 'h': # if positions = [(0,1), (0,2), (0,3)], then there is only one segment. However, if positions = [(0,1), (0,2), (0,4)], then there are two segments.
-        positions_sorted = sorted(positions, key=lambda x: (x[0], x[1]))
-        counter = 0
-        for i, pos in enumerate(positions_sorted):
-            if i == 0:
-                counter += 1
-            elif pos[0] != positions_sorted[i - 1][0]:
-                counter += 1
-            elif pos[1] != positions_sorted[i - 1][1] + 1:
-                counter += 1
-        return counter
-    else:
-        positions_sorted = sorted(positions, key=lambda x: (x[1], x[0]))
-        counter = 0
-        for i, pos in enumerate(positions_sorted):
-            if i == 0:
-                counter += 1
-            elif pos[1] != positions_sorted[i - 1][1]:
-                counter += 1
-            elif pos[0] != positions_sorted[i - 1][0] + 1:
-                counter += 1
-        return counter
+    axis_index = 0 if direction == 'h' else 1
+    positions_sorted = sorted(positions, key=lambda x: (x[axis_index], x[1-axis_index]))
+    counter = 0
+    for i, pos in enumerate(positions_sorted):
+        if i == 0:
+            counter += 1
+        elif pos[axis_index] != positions_sorted[i - 1][axis_index]:
+            counter += 1
+        elif pos[1-axis_index] != positions_sorted[i - 1][1-axis_index] + 1:
+            counter += 1
+    return counter
 
 
 drc = [(0, 1), (1, 0), (0, -1), (-1, 0)]
