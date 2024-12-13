@@ -24,54 +24,39 @@ visited = [[0] * ncols for _ in range(nrows)]
 # print(visited)
 
 # 3. Use BFS to find all the regions where the spots are connected and have the same letter
-"""
-Under the bulk discount, instead of using the perimeter to calculate the price, you need to use the number of sides each region has. 
-Each straight section of fence counts as a side, regardless of how long it is.
-"""
 drc = [(0, 1), (1, 0), (0, -1), (-1, 0)]
 regions = defaultdict(list)
 
 for r in range(nrows):
     for c in range(ncols):
         if visited[r][c] == 0:
+            # a new region
             region_id = rows[r][c]
-            subregion = []
+            region_spot_count = 0
             queue = deque([(r, c)])
             visited[r][c] = 1
+            boundaries = [] # record all the boundaries so we can merge them later to find the number of sides
             # BFS to find all the connected spots
             while queue:
                 cr, cc = queue.popleft()
-                subregion.append((cr, cc))
+                region_spot_count += 1
+                # Check the 4 directions of the current spot, if it's on the edge or next to a different region, add to perimeter
+                region_perimeter += sum(
+                    1 for dr, dc in drc if not (0 <= cr + dr < nrows and 0 <= cc + dc < ncols) or rows[cr + dr][cc + dc] != region_id
+                )
                 for dr, dc in drc:
                     nr, nc = cr + dr, cc + dc
                     if 0 <= nr < nrows and 0 <= nc < ncols and visited[nr][nc] == 0 and rows[nr][nc] == region_id:
                         queue.append((nr, nc))
                         visited[nr][nc] = 1
-            # Sort the subregion by the row number, then by the column number
-            subregion.sort(key=lambda x: (x[0], x[1]))
-            regions[region_id].append(subregion)
+            num_sides = 0
+            regions[region_id].append((region_spot_count, num_sides))
 
-print(regions)
+# print(regions)
 
-# 4. Traverse each region, count the number of spots and the number of sides based upon direction changes
-def direction(current_pos, next_pos):
-    return (next_pos[0] - current_pos[0], next_pos[1] - current_pos[1])
-
-## 4.1 Find all the boundary points
-def find_boundary_points(subregion):
-    boundary_points = []
-    for r, c in subregion:
-        for dr, dc in drc:
-            nr, nc = r + dr, c + dc
-            if (nr, nc) not in subregion:
-                boundary_points.append((r, c))
-                break
-    return boundary_points
-    
-
-# # 4. Calculate the total price
-# total_price = sum(region_spot_count * region_perimeter for region in regions.values() for region_spot_count, region_perimeter in region)
-# print(total_price)
+# 4. Calculate the total price
+total_price = sum(region_spot_count * num_sides for region in regions.values() for region_spot_count, num_sides in region)
+print(total_price)
 
 #####################################################
 end_time = time.time()
