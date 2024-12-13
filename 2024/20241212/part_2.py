@@ -24,6 +24,36 @@ visited = [[0] * ncols for _ in range(nrows)]
 # print(visited)
 
 # 3. Use BFS to find all the regions where the spots are connected and have the same letter
+def get_num_edges(positions, direction):
+    """
+    Given a list of positions, find the number of segments, segments are defined as connected positions, such as [(0,1), (0,2), (0,3)], or [(1,0), (2,0), (3,0)]
+    - If the direction is horizontal, find the number of segments in the horizontal direction
+    - If the direction is vertical, find the number of segments in the vertical direction
+    """
+    if direction == 'h': # if positions = [(0,1), (0,2), (0,3)], then there is only one segment. However, if positions = [(0,1), (0,2), (0,4)], then there are two segments.
+        positions_sorted = sorted(positions, key=lambda x: (x[0], x[1]))
+        counter = 0
+        for i, pos in enumerate(positions_sorted):
+            if i == 0:
+                counter += 1
+            elif pos[0] != positions_sorted[i - 1][0]:
+                counter += 1
+            elif pos[1] != positions_sorted[i - 1][1] + 1:
+                counter += 1
+        return counter
+    else:
+        positions_sorted = sorted(positions, key=lambda x: (x[1], x[0]))
+        counter = 0
+        for i, pos in enumerate(positions_sorted):
+            if i == 0:
+                counter += 1
+            elif pos[1] != positions_sorted[i - 1][1]:
+                counter += 1
+            elif pos[0] != positions_sorted[i - 1][0] + 1:
+                counter += 1
+        return counter
+
+
 drc = [(0, 1), (1, 0), (0, -1), (-1, 0)]
 regions = defaultdict(list)
 
@@ -35,21 +65,28 @@ for r in range(nrows):
             region_spot_count = 0
             queue = deque([(r, c)])
             visited[r][c] = 1
-            boundaries = [] # record all the boundaries so we can merge them later to find the number of sides
+            boundaries = defaultdict(list) # record all the boundaries so we can merge them later to find the number of sides
             # BFS to find all the connected spots
             while queue:
                 cr, cc = queue.popleft()
                 region_spot_count += 1
-                # Check the 4 directions of the current spot, if it's on the edge or next to a different region, add to perimeter
-                region_perimeter += sum(
-                    1 for dr, dc in drc if not (0 <= cr + dr < nrows and 0 <= cc + dc < ncols) or rows[cr + dr][cc + dc] != region_id
-                )
+                # Check the 4 directions of the current spot, if it's on the edge or next to a different region, record the boundaries
+                # region_perimeter += sum(
+                #     1 for dr, dc in drc if not (0 <= cr + dr < nrows and 0 <= cc + dc < ncols) or rows[cr + dr][cc + dc] != region_id
+                # )
+                for dr, dc in drc:
+                    if not (0 <= cr + dr < nrows and 0 <= cc + dc < ncols) or rows[cr + dr][cc + dc] != region_id:
+                        boundaries[(dc, dr)].append((cr, cc))
                 for dr, dc in drc:
                     nr, nc = cr + dr, cc + dc
                     if 0 <= nr < nrows and 0 <= nc < ncols and visited[nr][nc] == 0 and rows[nr][nc] == region_id:
                         queue.append((nr, nc))
                         visited[nr][nc] = 1
-            num_sides = 0
+            num_sides = sum([
+                get_num_edges(boundaries[dr, dc], 'h' if dr == 0 else 'v')
+                for dr, dc in boundaries.keys()
+            ])
+            print(f"region_id: {region_id}, region_spot_count: {region_spot_count}, num_sides: {num_sides}")
             regions[region_id].append((region_spot_count, num_sides))
 
 # print(regions)
