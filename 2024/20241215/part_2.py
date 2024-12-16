@@ -10,26 +10,26 @@ start_time = time.time()
 #####################################################
 # 1. Read the input file
 use_example = '--example' in sys.argv
+# path = "20241215_input_example.txt" if use_example else "20241215_input.txt"
 initial_pos_path = "20241215_initial_pos_example.txt" if use_example else "20241215_initial_pos.txt"
 moves_path = "20241215_moves_example.txt" if use_example else "20241215_moves.txt"
 
 grid = []
-# Augment the grid
 with open(initial_pos_path, "r") as file:
     for line in file:
         grid.append(list(line.strip().replace("#", "##").replace(".", "..").replace("@", "@.").replace("O", "[]")))
 
 nrows, ncols = len(grid), len(grid[0])
-print(f"Dimensions of the grid after augmentation: {nrows}x{ncols}")
-
-def print_grid(grid):
-    for row in grid:
-        print("".join(row))
-
-print_grid(grid)
+print(f"Dimensions of the grid: {nrows}x{ncols}")
 
 with open(moves_path, "r") as file:
     moves = file.read().strip().replace("\n", "")
+
+def print_grid(grid):
+    for row in grid:
+        print(*row, sep="")
+
+print_grid(grid)
 
 # 2. Find the initial position of the bot
 br, bc = None, None
@@ -51,34 +51,40 @@ for row in grid:
 print(f"Number of boxes: {boxes}, number of walls: {walls}, number of grid cells: {nrows * ncols}")
 
 # 5. Simulate the moves
-def print_grid(grid):
-    for row in grid:
-        print(*row, sep="")
-
+r, c = br, bc
 for idx, move in enumerate(tqdm(moves)):
     dr = {"v": 1, "^": -1}.get(move, 0)
     dc = {">": 1, "<": -1}.get(move, 0)
     # print(f"Move {idx + 1}: {dr}, {dc} || Bot: {br}, {bc}")
-    targets = [(br, bc)]
-    cbr, cbc = br, bc
+    targets = [(r, c)]
     go = True
-    while True:
-        cbr, cbc = cbr + dr, cbc + dc
-        if grid[cbr][cbc] == "#":
+    for cr, cc in targets:
+        nr, nc = cr + dr, cc + dc
+        if (nr, nc) in targets: continue
+        char = grid[nr][nc]
+        if char == "#":
             go = False
             break
-        if grid[cbr][cbc] == "O":
-            targets.append((cbr, cbc))
-        if grid[cbr][cbc] == ".":
-            break
+        if char == "[":
+            targets.append((nr, nc))
+            targets.append((nr, nc + 1))
+        elif char == "]":
+            targets.append((nr, nc))
+            targets.append((nr, nc - 1))
     if not go: continue
-    grid[br][bc] = "."
-    grid[br + dr][bc + dc] = "@"
-    for r, c in targets[1:]:
-        grid[r + dr][c + dc] = "O"
-    br, bc = br + dr, bc + dc
+    copy_grid = [list(row) for row in grid]
+    grid[r][c] = "."
+    grid[r + dr][c + dc] = "@"
+    for br, bc in targets[1:]:
+        grid[br][bc] = "."
+    for br, bc in targets[1:]:
+        grid[br+dr][bc+dc] = copy_grid[br][bc]
+    r += dr
+    c += dc
     # print(f"After move {idx + 1}:")
     # print_grid(grid)
+
+print_grid(grid)
 
 # 6. Calculate the answer
 print(
@@ -86,7 +92,7 @@ print(
         r * 100 + c
         for r in range(nrows)
         for c in range(ncols)
-        if grid[r][c] == "O"
+        if grid[r][c] == "["
     )
 )
 
