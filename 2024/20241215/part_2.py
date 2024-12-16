@@ -61,14 +61,13 @@ for idx, move in enumerate(tqdm(moves)):
     for cr, cc in targets:
         nr, nc = cr + dr, cc + dc
         if (nr, nc) in targets: continue
-        char = grid[nr][nc]
-        if char == "#":
+        if grid[nr][nc] == "#":
             go = False
             break
-        if char == "[":
+        if grid[nr][nc] == "[":
             targets.append((nr, nc))
             targets.append((nr, nc + 1))
-        elif char == "]":
+        elif grid[nr][nc] == "]":
             targets.append((nr, nc))
             targets.append((nr, nc - 1))
     if not go: continue
