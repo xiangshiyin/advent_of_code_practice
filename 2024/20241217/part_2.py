@@ -72,9 +72,8 @@ def execute_program(ra, rb, rc, program):
 program0 = program[:]
 def find_ra(program, ans):
     if program == []: return ans
-    for t in range(8):
-        a = (ans << 3) + t
-        b = a % 8
+    for b in range(8):
+        a = (ans << 3) + b
         b = b ^ 3
         c = a >> b
         b = b ^ c
