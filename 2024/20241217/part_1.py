@@ -32,7 +32,7 @@ with open(path, "r") as file:
     ra, rb, rc = map(int, re.findall(r'\d+', register_blob))
 
 l = len(program)
-print(program)
+# print(program)
 
 instructions =['adv', 'bxl', 'bst', 'jnz', 'bxc', 'out', 'bdv', 'cdv']
 

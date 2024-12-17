@@ -2,6 +2,7 @@ import os
 import sys
 import time
 import re
+from collections import deque
 # cd into the current directory
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -67,7 +68,26 @@ def execute_program(ra, rb, rc, program):
         pointer += 2
     return ','.join(map(str, outputs))
 
-print(execute_program(ra, rb, rc, program))
+# reverse engineering the program
+program0 = program[:]
+def find_ra(program, ans):
+    if program == []: return ans
+    for t in range(8):
+        a = (ans << 3) + t
+        b = a % 8
+        b = b ^ 3
+        c = a >> b
+        b = b ^ c
+        b = b ^ 3
+        if b % 8 == program[-1]:
+            if a == 0: continue # since 0 << 3 is still 0, we need to skip this answer
+            print(f"program[-1]: {program[-1]}, b%8: {b % 8}, a: {a}, validation: {execute_program(a, 0, 0, program0)}")
+            sub = find_ra(program[:-1], a)
+            if sub is None: continue
+            return sub
+
+print(find_ra(program, 0))
+
 
 #####################################################
 end_time = time.time()
