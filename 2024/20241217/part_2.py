@@ -41,33 +41,33 @@ if test_case_fixed:
     program = [0,3,5,4,3,0]
     ra, rb, rc = 117440, 0, 0
 
-l = len(program)
-print(program)
-
 instructions =['adv', 'bxl', 'bst', 'jnz', 'bxc', 'out', 'bdv', 'cdv']
 
-# 2. Execute the program
-pointer = 0
-outputs = []
-while True:
-    if pointer >= l: break
-    opcode = instructions[program[pointer]]
-    operand = program[pointer+1]
-    print(f"pointer: {pointer}, opcode: {opcode}, operand: {operand}, ra: {ra}, rb: {rb}, rc: {rc}")
+# 2. Execute the program, find the lowest number of ra so that the output repeats the program itself
+def execute_program(ra, rb, rc, program):
+    l = len(program)
+    pointer = 0
+    outputs = []
+    while True:
+        if pointer >= l: break
+        opcode = instructions[program[pointer]]
+        operand = program[pointer+1]
+        print(f"pointer: {pointer}, opcode: {opcode}, operand: {operand}, ra: {ra}, rb: {rb}, rc: {rc}")
 
-    output = None
-    if opcode == 'adv': ra = ra // 2 ** combo(operand, ra, rb, rc)
-    if opcode == 'bxl': rb = rb ^ operand
-    if opcode == 'bst': rb =combo(operand, ra, rb, rc) % 8
-    if opcode == 'jnz' and ra != 0: pointer = operand; continue
-    if opcode == 'bxc': rb = rb ^ rc
-    if opcode == 'out': output = combo(operand, ra, rb, rc) % 8
-    if opcode == 'bdv': rb = ra // 2 ** combo(operand, ra, rb, rc)
-    if opcode == 'cdv': rc = ra // 2 ** combo(operand, ra, rb, rc)
-    if output is not None: outputs.append(output)
-    pointer += 2
+        output = None
+        if opcode == 'adv': ra = ra // 2 ** combo(operand, ra, rb, rc)
+        if opcode == 'bxl': rb = rb ^ operand
+        if opcode == 'bst': rb =combo(operand, ra, rb, rc) % 8
+        if opcode == 'jnz' and ra != 0: pointer = operand; continue
+        if opcode == 'bxc': rb = rb ^ rc
+        if opcode == 'out': output = combo(operand, ra, rb, rc) % 8
+        if opcode == 'bdv': rb = ra // 2 ** combo(operand, ra, rb, rc)
+        if opcode == 'cdv': rc = ra // 2 ** combo(operand, ra, rb, rc)
+        if output is not None: outputs.append(output)
+        pointer += 2
+    return ','.join(map(str, outputs))
 
-print(','.join(map(str, outputs)))
+print(execute_program(ra, rb, rc, program))
 
 #####################################################
 end_time = time.time()
