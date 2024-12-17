@@ -43,7 +43,7 @@ while True:
     if pointer >= l: break
     opcode = instructions[program[pointer]]
     operand = program[pointer+1]
-    print(f"pointer: {pointer}, opcode: {opcode}, operand: {operand}, ra: {ra}, rb: {rb}, rc: {rc}")
+    # print(f"pointer: {pointer}, opcode: {opcode}, operand: {operand}, ra: {ra}, rb: {rb}, rc: {rc}")
 
     output = None
     if opcode == 'adv': ra = ra // 2 ** combo(operand, ra, rb, rc)

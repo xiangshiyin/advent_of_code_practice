@@ -52,17 +52,17 @@ def execute_program(ra, rb, rc, program):
         if pointer >= l: break
         opcode = instructions[program[pointer]]
         operand = program[pointer+1]
-        print(f"pointer: {pointer}, opcode: {opcode}, operand: {operand}, ra: {ra}, rb: {rb}, rc: {rc}")
+        # print(f"pointer: {pointer}, opcode: {opcode}, operand: {operand}, ra: {ra}, rb: {rb}, rc: {rc}")
 
         output = None
-        if opcode == 'adv': ra = ra // 2 ** combo(operand, ra, rb, rc)
+        if opcode == 'adv': ra = ra >> combo(operand, ra, rb, rc)
         if opcode == 'bxl': rb = rb ^ operand
         if opcode == 'bst': rb =combo(operand, ra, rb, rc) % 8
         if opcode == 'jnz' and ra != 0: pointer = operand; continue
         if opcode == 'bxc': rb = rb ^ rc
         if opcode == 'out': output = combo(operand, ra, rb, rc) % 8
-        if opcode == 'bdv': rb = ra // 2 ** combo(operand, ra, rb, rc)
-        if opcode == 'cdv': rc = ra // 2 ** combo(operand, ra, rb, rc)
+        if opcode == 'bdv': rb = ra >> combo(operand, ra, rb, rc)
+        if opcode == 'cdv': rc = ra >> combo(operand, ra, rb, rc)
         if output is not None: outputs.append(output)
         pointer += 2
     return ','.join(map(str, outputs))
