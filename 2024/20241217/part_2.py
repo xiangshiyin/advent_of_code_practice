@@ -23,6 +23,9 @@ start_time = time.time()
 #####################################################
 # 1. Read the input file
 use_example = '--example' in sys.argv
+test_case = '--test' in sys.argv
+test_case_fixed = '--fixed' in sys.argv
+
 path = "20241217_input_example.txt" if use_example else "20241217_input.txt"
 grid = []
 with open(path, "r") as file:
@@ -30,6 +33,13 @@ with open(path, "r") as file:
     register_blob, program_blob = blob.split("\n\n")
     program = list(map(int, re.findall(r'\d+', program_blob)))
     ra, rb, rc = map(int, re.findall(r'\d+', register_blob))
+
+if test_case:
+    program = [0,3,5,4,3,0]
+    ra, rb, rc = 2024, 0, 0
+if test_case_fixed:
+    program = [0,3,5,4,3,0]
+    ra, rb, rc = 117440, 0, 0
 
 l = len(program)
 print(program)
