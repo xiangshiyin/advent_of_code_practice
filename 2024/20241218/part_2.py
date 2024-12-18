@@ -28,7 +28,7 @@ def bfs(fallen_bytes, nrows, ncols):
     while q:
         cr, cc, step = q.popleft()
         if (cr, cc) == (nrows - 1, ncols - 1):
-            print(f"Shortest distance: {step}")
+            # print(f"Shortest distance: {step}")
             return True
         for dr, dc in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
             nr, nc = cr + dr, cc + dc
@@ -37,12 +37,25 @@ def bfs(fallen_bytes, nrows, ncols):
                 visited.add((nr, nc))
     return False
 
-# brutal force
-fallen_bytes = bytes[:2856]
-print(f"Number of fallen bytes: {len(fallen_bytes)}")
-print(bfs(fallen_bytes, nrows, ncols))
-print(fallen_bytes[-1][::-1])
+# # brutal force
+# fallen_bytes = bytes[:2855]
+# print(f"Number of fallen bytes: {len(fallen_bytes)}")
+# print(bfs(fallen_bytes, nrows, ncols))
+# print(fallen_bytes[-1][::-1])
 
+# use binary search to find the first time when there is no path to the exit
+# the goal is to find the minimum number of fallen bytes such that there is no path to the exit
+min_fallen_bytes = float('inf')
+l, r = 0, len(bytes)
+while l < r:
+    print(l, r)
+    mid = (l + r) // 2
+    fallen_bytes = bytes[:(mid+1)]
+    if bfs(fallen_bytes, nrows, ncols):
+        l = mid + 1
+    else:
+        r = mid - 1
+print(f"First byte that blocks the path is #{mid+1}: {bytes[mid][::-1]}")
 
 #####################################################
 end_time = time.time()
