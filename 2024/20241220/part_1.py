@@ -45,28 +45,47 @@ print(f"Longest distance: {longest_dist}")
 # for row in dists:
 #     print("|".join(f"{d:2}" for d in row))
 
-# 3. Traverse the dist map to find the cheat points that can save us X steps to reach the end
-def num_cheats(steps_to_save):
-    cheats = 0
-    for i in range(nrows):
-        for j in range(ncols):
-            if dists[i][j] == -1: continue
-            for dr, dc in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
-                nr, nc = i + dr, j + dc
-                if 0 <= nr < nrows and 0 <= nc < ncols and dists[nr][nc] == -1:
-                    for dr2, dc2 in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
-                        nnr, nnc = nr + dr2, nc + dc2
-                        if 0 <= nnr < nrows and 0 <= nnc < ncols and dists[nnr][nnc] != -1 and (dists[nnr][nnc] - dists[i][j]) >= 2 + steps_to_save:
-                            # print(f"Cheat point: {i}, {j} to {nr}, {nc} to {nnr}, {nnc}")
-                            cheats += 1
-    return cheats
+# 3. Save the spots on the path to a dict
+path_spots = {}
+for i in range(nrows):
+    for j in range(ncols):
+        if dists[i][j] != -1:
+            path_spots[(i, j)] = dists[i][j]
+
+# print({key:path_spots[key] for key in sorted(path_spots, key=lambda x: path_spots[x])})
+
+# 4. Traverse the spots on the path and find cheat points
+drc = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+
+def num_cheats(steps_to_save, steps_to_cheat):
+    counter = 0
+    # steps_to_save = 100
+    # steps_to_cheat = 20
+    visited = set()
+
+    for r, c in path_spots:
+        q = deque([(r, c, 0)])
+        visited2 = set()
+        while q:
+            cr, cc, steps = q.popleft()
+            if steps > steps_to_cheat: break
+            for dr, dc in drc:
+                nr, nc = cr + dr, cc + dc
+                if 0 <= nr < nrows and 0 <= nc < ncols and (nr, nc) not in visited2:
+                    visited2.add((nr, nc))
+                    if (nr, nc) in path_spots and (r, c, nr, nc) not in visited and (nr, nc, r, c) not in visited and abs(nr-r) + abs(nc-c) <= steps_to_cheat and path_spots[(nr, nc)] - path_spots[(r, c)] >= abs(nr-r) + abs(nc-c) + steps_to_save:
+                        counter += 1
+                        # print(f"Cheat point: ({r}, {c}) -> ({nr}, {nc}), old distance {path_spots[(nr, nc)] - path_spots[(r, c)]}, new distance: {abs(nr-r) + abs(nc-c)}, steps away from ({r}, {c}): {steps+1}")
+                        visited.add((r, c, nr, nc))
+                    q.append((nr, nc, steps + 1))
+    return counter
 
 # # example cases to test
 # steps_to_save = [2,4,6,8,10,12,20,36,38,40,64]
 # for step in steps_to_save:
-#     print(f"Steps to save: {step}, Cheats: {num_cheats(step)}")
+#     print(f"Steps to save: {step}, Cheats: {num_cheats(step, 2)}")
 
-print(num_cheats(100))
+print(num_cheats(100, 2))
 #####################################################
 end_time = time.time()
 print(f"Time taken: {end_time - start_time} seconds")
