@@ -56,10 +56,10 @@ def num_cheats(steps_to_save):
                 if 0 <= nr < nrows and 0 <= nc < ncols and dists[nr][nc] == -1:
                     for dr2, dc2 in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
                         nnr, nnc = nr + dr2, nc + dc2
-                        if 0 <= nnr < nrows and 0 <= nnc < ncols and dists[nnr][nnc] != -1 and abs(dists[nnr][nnc] - dists[i][j]) >= 2 + steps_to_save:
+                        if 0 <= nnr < nrows and 0 <= nnc < ncols and dists[nnr][nnc] != -1 and (dists[nnr][nnc] - dists[i][j]) >= 2 + steps_to_save:
                             # print(f"Cheat point: {i}, {j} to {nr}, {nc} to {nnr}, {nnc}")
                             cheats += 1
-    return cheats // 2
+    return cheats
 
 # # example cases to test
 # steps_to_save = [2,4,6,8,10,12,20,36,38,40,64]
