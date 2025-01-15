@@ -5,8 +5,6 @@ labels: ["Decision", "Decision Pending"]
 body:
   - type: dropdown
     id: status
-    validations:
-      required: true
     attributes:
       label: "Status"
       description: "Pick one of 'Decision Pending', 'Decision Resolved'"
@@ -15,41 +13,43 @@ body:
           value: "Decision Pending"
         - key: "Decision Resolved"
           value: "Decision Resolved"
+      validations:
+        required: true
   - type: input
     id: deadline
-    validations:
-      required: false
     attributes:
       label: "Deadline"
       description: "Deadline for providing feedback `yyyy-mm-dd`"
+      validations:
+        required: false
   - type: input
     id: owner
-    validations:
-      required: true
     attributes:
       label: "Owner"
       description: "github handle of the decision owner"
+      validations:
+        required: true
   - type: input
     id: scope
-    validations:
-      required: true
     attributes:
       label: "Scope"
       description: "Describe the scope, also ensure the correct labels are applied (eg. 'Analytic Domain', 'DW Tech', 'Standards', 'gsd:...')"
+      validations:
+        required: true
   - type: input
     id: approver
-    validations:
-      required: true
     attributes:
       label: "Approver"
       description: "Should be 2 members of AE SLT if data-warehouse wide, domain champion for domain specific"
+      validations:
+        required: true
   - type: markdown
     id: problem
-    validations:
-      required: true
     attributes:
       label: "Problem"
       description: "What is the question that requires a decision?"
+      validations:
+        required: true
     value: |
       ## What is the question that requires a decision?
       <!-- What question requires a decision? -->
