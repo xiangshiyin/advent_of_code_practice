@@ -1,44 +1,71 @@
-title: "Decision Template"
-labels:
-  - decision
-  - test
-  - abc
+title: "[Decision] ..."
+labels: ['Decision', 'Decision Pending']
+about: "This discussion aims to arrive at a decision"
+
 body:
-- type: textarea
-  attributes:
-    label: Operating System
-    description: What operating system are you using?
-    placeholder: "Example: macOS Big Sur"
-    value: operating system
-  validations:
-    required: true
-- type: textarea
-  attributes:
-    label: Another Section
-    description: What operating system are you using?
-    placeholder: "Example: macOS Big Sur"
-    value: operating system
-  validations:
-    required: true
-- type: dropdown
-  attributes:
-    label: Version
-    description: What version of our software are you running?
-    multiple: false
-    options:
-      - 1.0.2 (Default)
-      - 1.0.3 (Edge)
-    default: 0
-  validations:
-    required: true
-- type: checkboxes
-  attributes:
-    label: Code of Conduct
-    description: The Code of Conduct helps create a safe space for everyone. We require
-      that everyone agrees to it.
-    options:
-      - label: I agree to follow this project's [Code of Conduct](link/to/coc)
-        required: true
-- type: markdown
-  attributes:
-    value: "Thanks for completing our form!"
+  - type: dropdown
+    id: status
+    attributes:
+      label: "Status"
+      description: "Pick one of 'Decision Pending', 'Decision Resolved'"
+      required: true
+      options:
+        - label: "Decision Pending"
+          value: "Decision Pending"
+        - label: "Decision Resolved"
+          value: "Decision Resolved"
+   - type: input
+    id: deadline
+    attributes:
+      label: "Deadline"
+      description: "Deadline for providing feedback `yyyy-mm-dd`"
+      required: false
+   - type: input
+    id: owner
+    attributes:
+      label: "Owner"
+      description: "github handle of the decision owner"
+      required: true
+   - type: input
+    id: scope
+    attributes:
+      label: "Scope"
+      description: "Describe the scope, also ensure the correct labels are applied (eg. 'Analytic Domain', 'DW Tech', 'Standards', 'gsd:...')"
+      required: true
+   - type: approver
+    id: approver
+    attributes:
+      label: "Approver"
+      description: "abcde"
+      required: true
+  - type: markdown
+    id: problem
+    attributes:
+      label: "Problem"
+      description: "What is the question that requires a decision?"
+      required: true
+      value: |
+        ## What is the question that requires a decision?
+        <!-- What question requires a decision? -->
+
+        ### Context
+        #### Why this problem needs to be solved?
+        <!-- What happens if this decision is not made? -->
+
+        #### Who are the stakeholders of this problem?
+
+
+        ## Options
+
+        ### Option 1: *Status*
+        <!-- Pick one of "Open", "Accepted", "Rejected", "Recommended" -->
+
+        Pros:
+        - ...
+
+        Cons:
+        - ...
+
+        ### Option 2: *Status*
+        <!-- Pick one of "Open", "Accepted", "Rejected", "Recommended" -->
+        etc...
