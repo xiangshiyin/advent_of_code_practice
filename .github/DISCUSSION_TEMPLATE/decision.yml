@@ -11,9 +11,9 @@ body:
       label: "Status"
       description: "Pick one of 'Decision Pending', 'Decision Resolved'"
       options:
-        - label: "Decision Pending"
+        - key: "Decision Pending"
           value: "Decision Pending"
-        - label: "Decision Resolved"
+        - key: "Decision Resolved"
           value: "Decision Resolved"
   - type: input
     id: deadline
