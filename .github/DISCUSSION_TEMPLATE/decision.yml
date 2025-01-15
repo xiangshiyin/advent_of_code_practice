@@ -18,8 +18,8 @@ body:
     attributes:
       label: "Deadline"
       description: "Deadline for providing feedback `yyyy-mm-dd`"
-      validations:
-        required: false
+    validations:
+      required: false
   - type: input
     id: owner
     attributes:
