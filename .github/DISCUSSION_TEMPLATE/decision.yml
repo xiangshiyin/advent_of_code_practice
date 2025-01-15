@@ -10,9 +10,7 @@ body:
       description: "Pick one of 'Decision Pending', 'Decision Resolved'"
       options:
         - label: "Decision Pending"
-          value: "Decision Pending"
         - label: "Decision Resolved"
-          value: "Decision Resolved"
       # validations:
       #   required: true
   - type: input
