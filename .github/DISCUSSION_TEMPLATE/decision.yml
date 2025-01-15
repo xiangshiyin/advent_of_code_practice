@@ -50,28 +50,28 @@ body:
       description: "What is the question that requires a decision?"
       # validations:
       #   required: true
-    value: |
-      ## What is the question that requires a decision?
-      <!-- What question requires a decision? -->
+      value: |
+        ## What is the question that requires a decision?
+        <!-- What question requires a decision? -->
 
-      ### Context
-      #### Why this problem needs to be solved?
-      <!-- What happens if this decision is not made? -->
+        ### Context
+        #### Why this problem needs to be solved?
+        <!-- What happens if this decision is not made? -->
 
-      #### Who are the stakeholders of this problem?
+        #### Who are the stakeholders of this problem?
 
 
-      ## Options
+        ## Options
 
-      ### Option 1: *Status*
-      <!-- Pick one of "Open", "Accepted", "Rejected", "Recommended" -->
+        ### Option 1: *Status*
+        <!-- Pick one of "Open", "Accepted", "Rejected", "Recommended" -->
 
-      Pros:
-      - ...
+        Pros:
+        - ...
 
-      Cons:
-      - ...
+        Cons:
+        - ...
 
-      ### Option 2: *Status*
-      <!-- Pick one of "Open", "Accepted", "Rejected", "Recommended" -->
-      etc...
+        ### Option 2: *Status*
+        <!-- Pick one of "Open", "Accepted", "Rejected", "Recommended" -->
+        etc...
