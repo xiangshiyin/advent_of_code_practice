@@ -1,7 +1,7 @@
 title: "[Decision] ..."
 labels: ["Decision", "Decision Pending"]
-about: "This discussion aims to arrive at a decision"
-name: Decisions
+# about: "This discussion aims to arrive at a decision"
+# name: Decisions
 body:
   - type: dropdown
     id: status
@@ -46,8 +46,8 @@ body:
     validations:
       required: true
     attributes:
-      # label: "Problem"
-      # description: "What is the question that requires a decision?"
+      label: "Problem"
+      description: "What is the question that requires a decision?"
       value: |
         ## What is the question that requires a decision?
         <!-- What question requires a decision? -->
