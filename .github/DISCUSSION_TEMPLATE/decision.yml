@@ -14,30 +14,30 @@ body:
           value: "Decision Pending"
         - label: "Decision Resolved"
           value: "Decision Resolved"
-   - type: input
-    id: deadline
-    attributes:
-      label: "Deadline"
-      description: "Deadline for providing feedback `yyyy-mm-dd`"
-      required: false
-   - type: input
-    id: owner
-    attributes:
-      label: "Owner"
-      description: "github handle of the decision owner"
-      required: true
-   - type: input
-    id: scope
-    attributes:
-      label: "Scope"
-      description: "Describe the scope, also ensure the correct labels are applied (eg. 'Analytic Domain', 'DW Tech', 'Standards', 'gsd:...')"
-      required: true
-   - type: approver
-    id: approver
-    attributes:
-      label: "Approver"
-      description: "abcde"
-      required: true
+  #  - type: input
+  #   id: deadline
+  #   attributes:
+  #     label: "Deadline"
+  #     description: "Deadline for providing feedback `yyyy-mm-dd`"
+  #     required: false
+  #  - type: input
+  #   id: owner
+  #   attributes:
+  #     label: "Owner"
+  #     description: "github handle of the decision owner"
+  #     required: true
+  #  - type: input
+  #   id: scope
+  #   attributes:
+  #     label: "Scope"
+  #     description: "Describe the scope, also ensure the correct labels are applied (eg. 'Analytic Domain', 'DW Tech', 'Standards', 'gsd:...')"
+  #     required: true
+  #  - type: approver
+  #   id: approver
+  #   attributes:
+  #     label: "Approver"
+  #     description: "abcde"
+  #     required: true
   - type: markdown
     id: problem
     attributes:
