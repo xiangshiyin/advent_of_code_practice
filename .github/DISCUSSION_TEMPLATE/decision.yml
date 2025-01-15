@@ -9,9 +9,9 @@ body:
       label: "Status"
       description: "Pick one of 'Decision Pending', 'Decision Resolved'"
       options:
-        - key: "Decision Pending"
+        - label: "Decision Pending"
           value: "Decision Pending"
-        - key: "Decision Resolved"
+        - label: "Decision Resolved"
           value: "Decision Resolved"
       # validations:
       #   required: true
