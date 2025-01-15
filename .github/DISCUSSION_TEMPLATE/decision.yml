@@ -1,47 +1,55 @@
 title: "[Decision] ..."
-labels: ['Decision', 'Decision Pending']
+labels: ["Decision", "Decision Pending"]
 about: "This discussion aims to arrive at a decision"
-
+name: Decisions
 body:
   - type: dropdown
     id: status
+    validations:
+      required: true
     attributes:
       label: "Status"
       description: "Pick one of 'Decision Pending', 'Decision Resolved'"
-      required: true
       options:
         - label: "Decision Pending"
+          value: "Decision Pending"
         - label: "Decision Resolved"
+          value: "Decision Resolved"
   - type: input
     id: deadline
+    validations:
+      required: false
     attributes:
       label: "Deadline"
       description: "Deadline for providing feedback `yyyy-mm-dd`"
-      required: false
   - type: input
     id: owner
+    validations:
+      required: true
     attributes:
       label: "Owner"
       description: "github handle of the decision owner"
-      required: true
   - type: input
     id: scope
+    validations:
+      required: true
     attributes:
       label: "Scope"
       description: "Describe the scope, also ensure the correct labels are applied (eg. 'Analytic Domain', 'DW Tech', 'Standards', 'gsd:...')"
-      required: true
   - type: input
     id: approver
+    validations:
+      required: true
     attributes:
       label: "Approver"
-      description: "abcde"
-      required: true
+      description: "Should be 2 members of AE SLT if data-warehouse wide, domain champion for domain specific"
   - type: markdown
     id: problem
+    validations:
+      required: true
     attributes:
       label: "Problem"
       description: "What is the question that requires a decision?"
-      required: true
       value: |
         ## What is the question that requires a decision?
         <!-- What question requires a decision? -->
