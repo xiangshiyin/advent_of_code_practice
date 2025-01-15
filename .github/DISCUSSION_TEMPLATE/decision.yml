@@ -46,8 +46,8 @@ body:
     validations:
       required: true
     attributes:
-      label: "Problem"
-      description: "What is the question that requires a decision?"
+      # label: "Problem"
+      # description: "What is the question that requires a decision?"
       value: |
         ## What is the question that requires a decision?
         <!-- What question requires a decision? -->
