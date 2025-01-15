@@ -31,14 +31,14 @@ body:
     id: scope
     attributes:
       label: "Scope"
-      description: "Describe the scope, also ensure the correct labels are applied (eg. 'Analytic Domain', 'DW Tech', 'Standards', 'gsd:...')"
+      description: "XXX"
     validations:
       required: true
   - type: input
     id: approver
     attributes:
       label: "Approver"
-      description: "Should be 2 members of AE SLT if data-warehouse wide, domain champion for domain specific"
+      description: "Should be 2 members of XXX wide, XXX"
     validations:
       required: true
   - type: markdown
