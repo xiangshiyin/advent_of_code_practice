@@ -46,8 +46,8 @@ body:
   - type: markdown
     id: problem
     attributes:
-      label: "Problem"
-      description: "What is the question that requires a decision?"
+      # label: "Problem"
+      # description: "What is the question that requires a decision?"
       # validations:
       #   required: true
       value: |
