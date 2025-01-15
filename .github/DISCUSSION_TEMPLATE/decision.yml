@@ -1,6 +1,6 @@
 title: "[Decision] ..."
 labels: ['Decision', 'Decision Pending']
-about: "This discussion aims to arrive at a decision"
+# about: "This discussion aims to arrive at a decision"
 
 body:
   - type: dropdown
